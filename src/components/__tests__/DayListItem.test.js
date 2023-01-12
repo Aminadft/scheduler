@@ -26,10 +26,3 @@ it("renders '2 spots remaining' when there are 2 spots", () => {
   expect(getByText("2 spots remaining")).toBeInTheDocument();
 });
 
-
-  return (
-    <li className={dayClass}>
-      <h2>{props.name}</h2> 
-      <h3>{formatSpots()}</h3>
-    </li>
-  );
