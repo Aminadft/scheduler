@@ -12,24 +12,9 @@ const [state, setState] = useState({
   appointments: {},
   interviewers: {}
 });
-
+console.log('Old State Appointment ', state.appointments)
 // update day in state
 const setDay = day => setState({ ...state, day });
-
-// get daily appointments for days from state object
-const dailyAppointments = getAppointmentsForDay(state, state.day)
-
-//book interview function
- function bookInterview(id, interview) {
-  console.log(id, interview);
-}
-//save function
-function save(name, interviewer) {
-  const interview = {
-    student: name,
-    interviewer
-  };
-}
 
 
 // get all the data from API
@@ -49,6 +34,55 @@ useEffect(() => {
   }).catch(err => console.log(err))
 
 }, []);
+
+
+// update day in state
+const setDay = day => setState({ ...state, day });
+
+// get daily appointments for days from state object
+const dailyAppointments = getAppointmentsForDay(state, state.day)
+
+
+// get daily interviewers for day from state object
+const dailyInterviewers = getInterviewersForDay(state, state.day);
+
+const bookInterview = (id, interview) => {
+  // from FORM onSave, get sppointment id + interview object { student: name, interviewer: id}
+  
+  // create new appointment object with interview details
+  const appointment = {
+    ...state.appointments[id],
+    interview: { ...interview }
+  }; 
+  console.log('bookInterview New appointment', appointment)
+  // create new appointments object with appointment details
+  const appointments = {
+    ...state.appointments,
+    [id]: appointment
+  };
+
+  console.log('bookInterview New appointments', appointments)
+  // set the statement with new appointments object
+  setState({...state, appointments})
+
+}
+ console.log('New State Appointment ', state.appointments)
+
+   // passingg all props/data for each appointment to the the component
+   const appointmentComponent = dailyAppointments.map((appointment) => {
+    const interview = getInterview(state, appointment.interview);
+    return (
+      <Appointment key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+        interviewers={dailyInterviewers} 
+        bookInterview={bookInterview}/>
+    );
+  });
+//save function?????????
+
+
 
   return (
     <main className="layout">
