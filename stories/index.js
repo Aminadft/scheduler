@@ -1,14 +1,15 @@
-import React from "react";
+import React, { Fragment }  from "react";
 
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 
 import "index.scss";
-import "components/Appointment/styles.scss";
+// import "components/Appointment/styles.scss";
 
 import Button from "components/Button";
 import DayListItem from "components/DayListItem.js";
 import DayList from "components/DayList";
+import InterviewerList from "components/InterviewerList";
 import InterviewerListItem from "components/InterviewerListItem";
 import Appointment from "components/Appointment";
 import Header from "components/Appointment/Header";
@@ -67,7 +68,16 @@ storiesOf("Button", module)
         spots: 0,
       },
     ];
-    
+     
+
+    const interviewers = [
+      { id: 1, name: "Sylvia Palmer", avatar: "https://i.imgur.com/LpaY82x.png" },
+      { id: 2, name: "Tori Malcolm", avatar: "https://i.imgur.com/Nmx0Qxo.png" },
+      { id: 3, name: "Mildred Nazir", avatar: "https://i.imgur.com/T2WwVfS.png" },
+      { id: 4, name: "Cohana Roy", avatar: "https://i.imgur.com/FK8V841.jpg" },
+      { id: 5, name: "Sven Jones", avatar: "https://i.imgur.com/twYrpay.jpg" }
+    ];
+
     const interviewer = {
       id: 1,
       name: "Sylvia Palmer",
@@ -154,3 +164,19 @@ storiesOf("Button", module)
   .add("Edit", () => <Form student="Amina Malik" interviewer={3} interviewers={interviewers} onSave={action("onSave")} onCancel={action("onCancel")} />)
 
   
+  .add("Appointment Empty", () => (
+    <Fragment>
+      <Appointment id={1} time="4pm" />
+      <Appointment time="5pm" />
+    </Fragment>
+  ))
+  .add("Appointment Booked", () => (
+    <Fragment>
+      <Appointment
+        id={1}
+        time="4pm"
+        interview={{ student: "Lydia Miller-Jones", interviewer }}
+      />
+      <Appointment time="5pm" />
+    </Fragment>
+  ))
