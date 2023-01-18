@@ -20,7 +20,8 @@ export default function Appointment(props) {
   const CONFIRM = "CONFIRM"
   const DELETING = "DELETING"
   const EDIT = "EDIT"
-  
+  const ERROR_DELETE = "ERROR_DELETE"
+  const ERROR_SAVE = "ERROR_SAVE"
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -28,7 +29,7 @@ export default function Appointment(props) {
 
   const save =(name, interviewer) => {
     transition(SAVING)
-    console.log('Saving...'
+    console.log('Saving...')
     
       // Form onSave will create a new interview object and call bookInterview
       const id = props.id
@@ -42,36 +43,41 @@ export default function Appointment(props) {
     props.bookInterview(id, interview)
     .then(() => transition(SHOW)) // After bookInterview PUT request completes, it will transition to SHOW mode
     .then(() => console.log('Completed')) 
-
+    .catch(() => transition(ERROR_SAVE, true))             
   }
 
   // delete an appointment
   const onDelete = () => {
+    // confirmation for appointment deletion
     transition(CONFIRM)
   }
 
-  // cancel delete appointment
-  const onCancel = () => {
-    transition(SHOW)
-  }
+
 
   // confirm delete appoinment
-  const onConfirm = () => {
+  const destroy = () => {
     // Deleting status will appear while appointment gets deleted and state gets updated
-    transition(DELETING)
-    const id = props.id
-    const interview = null
+    transition(DELETING, true)
+    // const id = props.id
+    // const interview = null
     // Delete request sent to Appointment API
-    props.cancelInterview(id, interview).then(()=> transition(EMPTY)) // After delete is complete, appointment will be EMPTY
+    props
+    .cancelInterview(props.id)
+    .then(()=> transition(EMPTY)) 
+    // After delete is complete, appointment will be EMPTY
+    .catch(error => transition(ERROR_DELETE, true));
   }
+  
+    
+    
+  const onEdit = () => {
+    transition(EDIT)
+  }
+
     
     
     
-    
-    
-    
-    
-    )
+
   return (
     <article className="appointment">
       <Header time={props.time} />
@@ -80,7 +86,17 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
-
-
-
-<article className="appointment"></article>
+          onEdit={onEdit}
+          onDelete={onDelete}
+          />
+          )}
+          {mode === ERROR_SAVE && <Error message="Unable to Save Appointment" onClose={() => transition(EMPTY, true)} />}
+          {mode === ERROR_DELETE && <Error message="Unable to Delete Appointment" onClose={() => transition(SHOW, true)} />}
+          {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} onSave={save} onCancel={()=>{back()}}/>}
+          {mode === CONFIRM && <Confirm onConfirm={destroy} onCancel={()=> back()} message="Confirm to DELETE this Appointment."/>}
+          {mode === DELETING && <Status message="Deleting"/>}
+          {mode === CREATE && <Form interviewers={props.interviewers} onSave={save} onCancel={()=>back()}/>}
+          {mode === SAVING && <Status message="Saving"/>}
+        </article>
+      );
+    }
