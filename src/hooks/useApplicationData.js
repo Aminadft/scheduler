@@ -57,25 +57,25 @@ const useApplicationData = () => {
 
   const bookInterview = (id, interview) => {
     // from form component onSave, get sppointment id + interview object { student: name, interviewer: id}
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview },
+    };
+
+    // create new appointments object with appointment details
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+
+    // update state.days with updated number of spots left
+    const days = updateSpots(state);
     // update the database for this appointment id
     return axios
-      .put(`/api/appointments/${id}`, { interview })
+      .put(`/api/appointments/${id}`, appointment )
       .then((response) => {
         console.log("Response Status: ", response.status);
         // create new appointment object with interview details
-        const appointment = {
-          ...state.appointments[id],
-          interview: { ...interview },
-        };
-
-        // create new appointments object with appointment details
-        const appointments = {
-          ...state.appointments,
-          [id]: appointment,
-        };
-
-        // update state.days with updated number of spots left
-        const days = updateSpots(state);
 
         // set the state with new appointments and days data
         setState({ ...state, appointments, days });

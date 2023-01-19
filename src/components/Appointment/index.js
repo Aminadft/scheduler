@@ -28,21 +28,20 @@ export default function Appointment(props) {
   );
 
   const save =(name, interviewer) => {
-    transition(SAVING)
     console.log('Saving...')
     
-      // Form onSave will create a new interview object and call bookInterview
-      const id = props.id
-      const interview = {
-        student: name,
-        interviewer
-      };
-
+    // Form onSave will create a new interview object and call bookInterview
+    const id = props.id
+    const interview = {
+      student: name,
+      interviewer
+    };
+    
+    transition(SAVING)
       
     // Pass the interview data to bookInterview to update appointment API
     props.bookInterview(id, interview)
     .then(() => transition(SHOW)) // After bookInterview PUT request completes, it will transition to SHOW mode
-    .then(() => console.log('Completed')) 
     .catch(() => transition(ERROR_SAVE, true))             
   }
 
