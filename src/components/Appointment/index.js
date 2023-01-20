@@ -73,9 +73,6 @@ export default function Appointment(props) {
   };
 
 
-
-
-
   return (
     <article data-testid="appointment" className="appointment">
       <Header time={props.time} />
@@ -88,12 +85,12 @@ export default function Appointment(props) {
           onDelete={onDelete}
         />
       )}
-      {mode === ERROR_SAVE && <Error message="Cannot Save Appointment" onClose={() => transition(EMPTY, true)} />}
-      {mode === ERROR_DELETE && <Error message="Cannot Delete Appointment" onClose={() => transition(SHOW, true)} />}
+      {mode === ERROR_SAVE && <Error message="Cannot Save Appointment" onClose={back} />}
+      {mode === ERROR_DELETE && <Error message="Cannot Delete Appointment" onClose={back} />}
       {mode === EDIT && <Form student={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} onSave={save} onCancel={() => { back(); }} />}
-      {mode === CONFIRM && <Confirm onConfirm={destroy} onCancel={() => back()} message="Confirm to DELETE this Appointment." />}
+      {mode === CONFIRM && <Confirm onConfirm={destroy} onCancel={back} message="Confirm to DELETE this Appointment." />}
       {mode === DELETING && <Status message="Deleting" />}
-      {mode === CREATE && <Form interviewers={props.interviewers} onSave={save} onCancel={() => back()} />}
+      {mode === CREATE && <Form interviewers={props.interviewers} onSave={save} onCancel={back} />}
       {mode === SAVING && <Status message="Saving" />}
     </article>
   );
