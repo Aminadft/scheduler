@@ -28,3 +28,5 @@ npm test
 ```sh
 npm run storybook
 ```
+SCREENSHOTS
+!["XX"](/home/labber/scheduler/public/docs/appointments.png)
