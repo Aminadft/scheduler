@@ -1,8 +1,15 @@
 # Interview Scheduler
-
-## Setup
+Using the latest tools and techniques, we build and test a React application that allows users to book and cancel interviews. We combine a concise API with a WebSocket server to build a realtime experience.
+## Technical Setup
 
 Install dependencies with `npm install`.
+This app was built using:
+
+React, Axios, JSX, HTML, SASS, JavaScript -front end
+Webpack, Babel
+PostgreSQL (via @lighthouse-labs/scheduler-api), Express, node.js -back end
+Axios
+Storybook, Jest, Testing Library, Cypress -testing
 
 ## Running Webpack Development Server
 
