@@ -28,3 +28,9 @@ npm test
 ```sh
 npm run storybook
 ```
+SCREENSHOTS
+!["appointments booking in the scheduler"](https://github.com/Aminadft/scheduler/blob/master/public/docs/SCEDULAR.PNG?raw=true)
+
+!["process of booked slot or appointment view in the scheduler"](https://github.com/Aminadft/scheduler/blob/master/public/docs/sceduler2.PNG?raw=true)
+
+!["process of booked slot or appointment view in the scheduler"](https://github.com/Aminadft/scheduler/blob/master/public/docs/interview.PNG?raw=true)
