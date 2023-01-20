@@ -29,4 +29,4 @@ npm test
 npm run storybook
 ```
 SCREENSHOTS
-!["XX"](/home/labber/scheduler/public/docs/appointments.png)
+!["appointments booking in the scheduler"](https://github.com/Aminadft/scheduler/blob/master/public/docs/SCEDULAR.PNG?raw=true)
