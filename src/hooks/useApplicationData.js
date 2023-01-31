@@ -16,9 +16,9 @@ const useApplicationData = () => {
   // get all the data from API
   useEffect(() => {
     Promise.all([
-      axios.get("http://localhost:8001/api/days"),
-      axios.get("http://localhost:8001/api/appointments"),
-      axios.get("http://localhost:8001/api/interviewers"),
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers"),
     ])
       .then((all) => {
         const days = all[0].data;
@@ -31,55 +31,54 @@ const useApplicationData = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const updateSpots = (state, add = false) => {
-    // get the day you want to update
-    const updatedDay = state.days.filter((d) => d.name === state.day)[0];
+  const updateSpots = (state, appointments) => {
+    // Get the day
+    const dayObj = state.days.find((d) => d.name === state.day);
 
-    if (add) {
-      // add spot if an interview is being cancelled
-      updatedDay.spots++;
-    } else {
-      // remove a spot if an interview is being booked
-      updatedDay.spots--;
-    }
-
-    // create a new days Array and replace the day with updatedDay
-    const days = state.days.map((day) => {
-      if (day.name === state.day) {
-        return updatedDay;
-      } else {
-        return day;
+    // count the null appointments
+    let spots = 0
+    for (const id of dayObj.appointments){
+      const appointment = appointments[id] 
+        if (!appointment.interview){
+          spots ++
+        }
       }
-    });
+    
 
-    return days;
-  };
+    const day = { ...dayObj, spots}
+    const days = state.days.map(d => d.name === state.day ? day : d)
+
+    return days
+  }
 
   const bookInterview = (id, interview) => {
     // from form component onSave, get sppointment id + interview object { student: name, interviewer: id}
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview },
-    };
-
-    // create new appointments object with appointment details
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
-    // update state.days with updated number of spots left
-    const days = updateSpots(state);
     // update the database for this appointment id
     return axios
-      .put(`/api/appointments/${id}`, appointment )
+      .put(`/api/appointments/${id}`, { interview })
       .then((response) => {
         console.log("Response Status: ", response.status);
         // create new appointment object with interview details
+        const appointment = {
+          ...state.appointments[id],
+          interview: { ...interview },
+        };
+
+        // create new appointments object with appointment details
+        const appointments = {
+          ...state.appointments,
+          [id]: appointment,
+        };
+
+        // update state.days with updated number of spots left
+        // const days2= updateSpots(state);
+
+        const days = updateSpots(state, appointments);
 
         // set the state with new appointments and days data
         setState({ ...state, appointments, days });
-      });
+      })
+  
   };
 
   const cancelInterview = (id) => {
@@ -99,7 +98,7 @@ const useApplicationData = () => {
       };
 
       // update state.days with updated number of spots left
-      const days = updateSpots(state, true);
+      const days = updateSpots(state, appointments);
 
       // set the state with new appointments and days data
       setState({ ...state, appointments, days });

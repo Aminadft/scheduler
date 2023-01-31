@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-
-import InterviewerList from '../InterviewerList';
-import Button from '../Button';
-
+import React, { useState } from "react";
+import Button from "../Button";
+import InterviewerList from "../InterviewerList";
 
 export default function Form(props) {
-
-
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
   const [error, setError] = useState("");
+
 
   console.log("Interviewer", interviewer);
   console.log("Student", student);
@@ -18,7 +15,7 @@ export default function Form(props) {
   const reset = () => {
     setStudent("");
     setInterviewer(null);
-    setError("");
+    setError("")
   };
 
   const cancel = () => {
@@ -37,10 +34,10 @@ export default function Form(props) {
       setError("Please select an interviewer");
       return;
     }
-
+    
     props.onSave(student, interviewer);
-    reset();
-  };
+    reset()
+  }
 
   return (
     <main className="appointment__card appointment__card--create">
@@ -57,7 +54,7 @@ export default function Form(props) {
           />
           <section className="appointment__validation">{error}</section>
         </form>
-
+        
         <InterviewerList
           interviewers={props.interviewers}
           value={interviewer}
